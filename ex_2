@@ -1,0 +1,43 @@
+#include <iostream>
+#include <string>
+#include <algorithm> // Necessário para transformar em maiúsculo
+#include <cctype>    // Necessário para isspace e toupper
+
+using namespace std;
+
+int main() {
+    // Configura o console para aceitar acentos
+    setlocale(LC_ALL, "Portuguese");
+
+    string mensagem, limpa = "";
+
+    cout << "--- Verificador de Palíndromos ---" << endl;
+    cout << "Digite a mensagem: ";
+    getline(cin, mensagem);
+
+    for (char c : mensagem) {
+        if (!isspace(c)) { // Se não for espaço
+            limpa += toupper(c); // Adiciona à nova string em maiúsculo
+        }
+    }
+
+    bool ehPalindromo = true;
+    int tam = limpa.length();
+
+    for (int i = 0; i < tam / 2; i++) {
+        if (limpa[i] != limpa[tam - 1 - i]) {
+            ehPalindromo = false;
+            break; // Se uma letra for diferente, já sabemos que não é palíndromo
+        }
+    }
+  
+    cout << "\nFrase processada: " << limpa << endl;
+    
+    if (ehPalindromo && tam > 0) {
+        cout << "RESULTADO: A mensagem É um palíndromo!" << endl;
+    } else {
+        cout << "RESULTADO: A mensagem NÃO é um palíndromo." << endl;
+    }
+
+    return 0;
+}
