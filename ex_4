@@ -1,0 +1,61 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <sstream> // Necessário para dividir a string em palavras
+#include <cctype>  // Necessário para toupper
+
+using namespace std;
+
+// Função auxiliar para converter uma string para MAIÚSCULAS
+string paraMaiusculo(string s) {
+    for (int i = 0; i < s.length(); i++) {
+        s[i] = toupper(s[i]);
+    }
+    return s;
+}
+
+int main() {
+    setlocale(LC_ALL, "Portuguese");
+
+    ifstream arquivoEntrada("nomes.txt");
+
+    if (!arquivoEntrada.is_open()) {
+        cerr << "Erro: O arquivo 'nomes.txt' não foi encontrado." << endl;
+        return 1;
+    }
+
+    string linha;
+    cout << "--- FORMATO CITAÇÃO BIBLIOGRÁFICA ---\n" << endl;
+
+    while (getline(arquivoEntrada, linha)) {
+        stringstream ss(linha);
+        string palavra;
+        vector<string> partesDoNome;
+
+        while (ss >> palavra) {
+            partesDoNome.push_back(palavra);
+        }
+
+        int n = partesDoNome.size();
+
+        if (n >= 2) {
+            string ultimoNome = paraMaiusculo(partesDoNome[n - 1]);
+
+            string primeiroNome = partesDoNome[0];
+
+            string iniciais = "";
+            for (int i = 1; i < n - 1; i++) {
+                iniciais += " " + partesDoNome[i].substr(0, 1) + ".";
+            }
+
+            cout << ultimoNome << ", " << primeiroNome << iniciais << endl;
+        } 
+        else if (n == 1) {
+            cout << paraMaiusculo(partesDoNome[0]) << endl;
+        }
+    }
+
+    arquivoEntrada.close();
+    return 0;
+}
