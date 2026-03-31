@@ -1,0 +1,48 @@
+#include <iostream>
+#include <fstream>   // Para manipular arquivos
+#include <string>    // Para manipular strings
+#include <locale>    // Para acentuação
+
+using namespace std;
+
+int main() {
+    // Configura o console para aceitar acentos
+    setlocale(LC_ALL, "Portuguese");
+
+    ifstream arquivoEntrada("nomes.txt");
+
+    if (!arquivoEntrada.is_open()) {
+        cerr << "Erro: Não foi possível encontrar o arquivo 'nomes.txt'." << endl;
+        return 1;
+    }
+
+    string nomeCompleto;
+    cout << "--- FORMATANDO AGENDA TELEFÔNICA ---\n" << endl;
+
+    while (getline(arquivoEntrada, nomeCompleto)) {
+        
+        size_t primeiro = nomeCompleto.find_first_not_of(' ');
+        if (string::npos == primeiro) continue;
+        size_t ultimo = nomeCompleto.find_last_not_of(' ');
+        nomeCompleto = nomeCompleto.substr(primeiro, (ultimo - primeiro + 1));
+
+        size_t posicaoUltimoEspaco = nomeCompleto.find_last_of(' ');
+
+        if (posicaoUltimoEspaco != string::npos) {
+            string sobrenome = nomeCompleto.substr(posicaoUltimoEspaco + 1);
+            
+            string restoDoNome = nomeCompleto.substr(0, posicaoUltimoEspaco);
+
+            cout << sobrenome << ", " << restoDoNome << endl;
+        } else {
+            cout << nomeCompleto << endl;
+        }
+    }
+    
+    arquivoEntrada.close();
+
+    cout << "\n------------------------------------" << endl;
+    cout << "Processamento concluído!" << endl;
+
+    return 0;
+}
