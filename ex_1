@@ -1,0 +1,51 @@
+#include <iostream>
+#include <string>
+#include <windows.h> // Necessário para gotoxy e Sleep
+
+using namespace std;
+
+void gotoxy(int x, int y) {
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
+int main() {
+    // Configura o console para aceitar caracteres especiais (acentos)
+    setlocale(LC_ALL, "Portuguese");
+
+    string mensagem;
+    int larguraTela = 80;
+    int linhaInicial = 5;
+    int linhaFinal = 20;
+
+    cout << "Digite sua mensagem: ";
+    getline(cin, mensagem);
+    
+    system("cls"); 
+
+    int tam = mensagem.length();
+    int colunaInicial = (larguraTela - tam) / 2; 
+    gotoxy(colunaInicial, linhaInicial);
+    cout << mensagem;
+
+    for (int i = 0; i < tam; i++) {
+        char letraAtual = mensagem[i];
+
+        for (int y = linhaInicial; y < linhaFinal; y++) {
+            gotoxy(colunaInicial + i, y);
+            cout << " ";
+
+            gotoxy(colunaInicial + i, y + 1);
+            cout << letraAtual;
+
+            Sleep(50); 
+        }
+    }
+
+    gotoxy(0, linhaFinal + 2);
+    cout << "Animação concluída!" << endl;
+
+    return 0;
+}
